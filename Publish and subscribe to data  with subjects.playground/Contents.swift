@@ -17,3 +17,13 @@ subject.send(175) // works
 // connect subject to publisher
 Just(200).subscribe(subject)
 //subject.send(300) // does not work
+
+
+// currentValueSubject
+let anotherSubject = CurrentValueSubject<String, Never>("1st value")
+
+let anotherSubscriber = anotherSubject.sink { stringValue in
+    print(stringValue) // gives both previous value and new value
+}
+anotherSubject.send("2nd value")
+
