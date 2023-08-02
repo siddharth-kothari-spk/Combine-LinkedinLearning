@@ -21,13 +21,15 @@ enum FutureError: Error {
     case notMultiple
 }
 
-let future = Future<String, FutureError> { promise in
+let future = Future<String, FutureError>{promise in
     let calendar = Calendar.current
     let second = calendar.component(.second, from: Date())
     print("second is \(second)")
     if second.isMultiple(of: 3){
+        print("success")
         promise(.success("We are successful: \(second)"))
     }else{
+        print("failure")
         promise(.failure(.notMultiple))
     }
 }.catch{error in
