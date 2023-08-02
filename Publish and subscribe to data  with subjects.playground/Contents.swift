@@ -26,4 +26,6 @@ let anotherSubscriber = anotherSubject.sink { stringValue in
     print(stringValue) // gives both previous value and new value
 }
 anotherSubject.send("2nd value")
-
+anotherSubject.send("2.25 value")
+Just("2.5 value").subscribe(anotherSubject)
+//anotherSubject.send("3rd value") // does not work
