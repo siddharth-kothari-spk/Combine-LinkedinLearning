@@ -5,3 +5,10 @@ import Foundation
 let _ = Just("sample data").sink { strValue in
     print(strValue)
 }
+
+
+let subject = PassthroughSubject<Int, Never>()
+let subscriber = subject.sink { num in
+    print(num)
+}
+Just(100).subscribe(subject)
