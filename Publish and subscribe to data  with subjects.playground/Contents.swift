@@ -12,4 +12,7 @@ let subscriber = subject.sink { num in
 // publish value via subkect
 subject.send(100)
 
+// connect subject to publisher
+Just(200).subscribe(subject)
+
 
