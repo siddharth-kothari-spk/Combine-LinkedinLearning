@@ -23,6 +23,7 @@ Just(200).subscribe(subject)
 let anotherSubject = CurrentValueSubject<String, Never>("1st value")
 
 let anotherSubscriber = anotherSubject.sink { stringValue in
+    print("-----")
     print(stringValue) // gives both previous value and new value
 }
 anotherSubject.send("2nd value")
