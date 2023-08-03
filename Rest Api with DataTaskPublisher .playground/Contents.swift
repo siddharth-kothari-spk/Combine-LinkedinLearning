@@ -8,13 +8,29 @@ struct Post: Codable{
     let body: String
 }
 
-let samplePost = Post(userId: 1, id: 2, title: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit", body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto")
+enum APIError: Error{
+    case networkError(error: String)
+    case responseError(error: String)
+    case unknownError
+}
 
-let url = URL(string: "https://jsonplaceholder.typicode.com/posts")
+let samplePost = Post(userId: 1, id: 2, title: "No Post", body: "")
+
+let url = URL(string: "https://1jsonplaceholder.typicode.com/posts")
 
 let publisher = URLSession.shared.dataTaskPublisher(for: url!).map{$0.data}.decode(type: [Post].self, decoder: JSONDecoder())
 
-let cancellableSink = publisher.sink { completion in
+let cancellableSink = publisher
+    .mapError({ error -> Error in
+    switch error {
+    case URLError.cannotFindHost:
+        print("Error: \(error)")
+        return APIError.networkError(error: error.localizedDescription)
+    default:
+        print("Error: \(error)")
+        return APIError.responseError(error: error.localizedDescription)
+    }
+}).sink { completion in
     print(String(describing: completion))
 } receiveValue: { posts in
     print("posts: \(posts)")
