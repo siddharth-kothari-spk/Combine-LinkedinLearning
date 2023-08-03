@@ -21,6 +21,7 @@ let url = URL(string: "https://1jsonplaceholder.typicode.com/posts")
 let publisher = URLSession.shared.dataTaskPublisher(for: url!).map{$0.data}.decode(type: [Post].self, decoder: JSONDecoder())
 
 let cancellableSink = publisher
+    .retry(2)
     .mapError({ error -> Error in
     switch error {
     case URLError.cannotFindHost:
