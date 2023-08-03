@@ -16,7 +16,7 @@ enum APIError: Error{
 
 let samplePost = Post(userId: 1, id: 2, title: "No Post", body: "")
 
-let url = URL(string: "https://1jsonplaceholder.typicode.com/posts")
+let url = URL(string: "https://jsonplaceholder.typicode.com/posts")
 
 let publisher = URLSession.shared.dataTaskPublisher(for: url!).map{$0.data}.decode(type: [Post].self, decoder: JSONDecoder())
 
@@ -39,3 +39,14 @@ let cancellableSink = publisher
     print(type(of: posts.first))
 }
 
+
+print("=============================")
+//
+Just(100).tryMap { _ in
+    throw APIError.unknownError
+}.catch { errorResult in
+    //print(String(describing: errorResult.localizedDescription))
+    Just(200)
+}.sink { sinkResult in
+    print("sinkResult = \(sinkResult)")
+}
